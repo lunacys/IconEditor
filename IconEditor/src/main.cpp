@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 	//proc->save_to_file("hello.t");
 	SDL_SetRenderDrawColor(renderer, 127, 127, 127, 255);
-
+	// TODO: DEAL WITH ALPHA CHANNELS
 	SDL_Point ttt{ 24, 24 };
 
 	while (true) {

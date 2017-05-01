@@ -215,6 +215,8 @@ void IcoProcessor::update()
 			SDL_MapRGB(SDL_GetWindowSurface(window_)->format,
 			pixel_data_[i]->r, pixel_data_[i]->g, pixel_data_[i]->b);
 
+
+
 		//Uint8 r, g, b;
 		//SDL_GetRGB(p[i], SDL_GetWindowSurface(window_)->format, &r, &g, &b);
 	}
