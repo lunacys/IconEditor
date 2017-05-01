@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ico_processor.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -180,6 +181,7 @@
     <Library Include="lib\SDL2_ttf.lib" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ico_processor.h" />
     <ClInclude Include="include\SDL2\begin_code.h" />
     <ClInclude Include="include\SDL2\close_code.h" />
     <ClInclude Include="include\SDL2\SDL.h" />
