@@ -20,9 +20,6 @@
   <ItemGroup>
     <Library Include="lib\SDL2test.lib" />
     <Library Include="lib\SDL2.lib" />
-    <Library Include="lib\SDL2_image.lib" />
-    <Library Include="lib\SDL2_net.lib" />
-    <Library Include="lib\SDL2_ttf.lib" />
     <Library Include="lib\SDL2main.lib" />
   </ItemGroup>
   <ItemGroup>
@@ -256,5 +253,8 @@
     <ClCompile Include="ico_processor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include <vector>
 #include "../ico_processor.h"
 
+const int WindowWidth = 1024, WindowHeight = 768;
 
 int main(int argc, char *argv[])
 {
@@ -19,49 +20,72 @@ int main(int argc, char *argv[])
 	SDL_Window *window = SDL_CreateWindow("SDL_CreateTexture",
 	                                      SDL_WINDOWPOS_UNDEFINED,
 	                                      SDL_WINDOWPOS_UNDEFINED,
-	                                      1024, 768,
+	                                      WindowWidth, WindowHeight,
 	                                      SDL_WINDOW_RESIZABLE);
 
-	SDL_Rect rect = { 128, 128, 16, 16 };
-	SDL_Rect rect2 = { 128 + 16, 128, 32, 32 };
-	SDL_Rect rect3 = { 128 + 16 + 32, 128, 48, 48 };
-	SDL_Rect rect4 = { 128 + 16 + 32 + 48, 128, 64, 64 };
+	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	SDL_Surface* interfaceSurface = SDL_LoadBMP("Interface.bmp");
+	SDL_Texture* interfaceTexture = SDL_CreateTextureFromSurface(renderer, interfaceSurface);
 
-	SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, 0);
-
-	IcoProcessor* i16x16 = new IcoProcessor(window, renderer, "16x16.ico");
-	IcoProcessor* i32x32 = new IcoProcessor(window, renderer, "32x32.ico"); 
-	IcoProcessor* i48x48 = new IcoProcessor(window, renderer, "48x48.ico"); 
-	IcoProcessor* i64x64 = new IcoProcessor(window, renderer, "64x64.ico");
-
-	auto red = Rgb{ 255, 255, 0 };
-	i64x64->set_pixel_at(0, 0, &red);
-	i48x48->flip_horizontally();
-	i48x48->update();
-
-	i16x16->save_to_file("sdsfd.ico");
-	i64x64->save_to_file("newxd.ico");
-
-	//proc->save_to_file("hello.t");
 	SDL_SetRenderDrawColor(renderer, 127, 127, 127, 255);
-	// TODO: DEAL WITH ALPHA CHANNELS
-	SDL_Point ttt{ 24, 24 };
 
-	while (true) {
+	SDL_Rect mainViewport, sheetViewport;
+	mainViewport = { 0, 0, WindowWidth, WindowHeight };
+	sheetViewport = { 190, 11, WindowWidth - 15 - 190, WindowHeight - 11 - 11};
+
+	IcoProcessor* first = new IcoProcessor(window, renderer, "16x16.ico", sheetViewport.w / 2, sheetViewport.h/2);
+
+	int mouseX, mouseY;
+	BGRA asd = { 100, 200, 255, 255 };
+	
+	first->set_scale(8);
+
+	while (true)
+	{
 		SDL_PollEvent(&event);
+		SDL_GetMouseState(&mouseX, &mouseY);
+
 		if (event.type == SDL_QUIT)
 			break;
+		if (event.type == SDL_MOUSEBUTTONDOWN)
+		{
+			SDL_Keycode k = event.button.button;
+
+			int scale = first->get_scale();
+			int msofx = mouseX - sheetViewport.x - (sheetViewport.w ) / 2 + first->get_width() / 2 * scale;
+			int msofy = mouseY - sheetViewport.y - (sheetViewport.h ) / 2 + first->get_height() / 2 * scale;
+			int offsetX = ((msofx - msofx % scale) / scale);
+			int offsetY = ((msofy - msofy % scale) / scale);
+			std::cout << offsetX << " | " << offsetY << std::endl;
+
+			if (k == SDL_BUTTON_LEFT)
+				first->set_pixel_at(offsetX, offsetY, asd);
+		}
+		if (event.type == SDL_KEYDOWN)
+		{
+			SDL_Keycode k = event.key.keysym.sym;
+			if (k == SDLK_ESCAPE)
+				break;
+			if (k == SDLK_DOWN)
+				first->set_scale(first->get_scale() - 1);
+			if (k == SDLK_UP)
+				first->set_scale(first->get_scale() + 1);
+		}
+		//first->set_scale(8.0f);
+		//first->set_scale(first->get_scale() + 0.001f);
 
 		SDL_RenderClear(renderer);
-		SDL_RenderCopyEx(renderer, i16x16->to_texture(), nullptr, &rect, 0.0, &ttt, SDL_FLIP_VERTICAL);
-		SDL_RenderCopyEx(renderer, i32x32->to_texture(), nullptr, &rect2, 0.0, &ttt, SDL_FLIP_VERTICAL);
-		SDL_RenderCopyEx(renderer, i48x48->to_texture(), nullptr, &rect3, 0.0, &ttt, SDL_FLIP_VERTICAL);
-		SDL_RenderCopyEx(renderer, i64x64->to_texture(), nullptr, &rect4, 0.0, &ttt, SDL_FLIP_VERTICAL);
+		SDL_RenderSetViewport(renderer, &mainViewport);
+		SDL_RenderCopy(renderer, interfaceTexture, nullptr, &mainViewport);
+		
+		SDL_RenderSetViewport(renderer, &sheetViewport);
+		first->render();
 		SDL_RenderPresent(renderer);
 	}
 
-	//delete i16x16;
-	//SDL_DestroyTexture(texture);
+	first->save_to_file("hi.ico");
+
+	delete first;
 	SDL_DestroyRenderer(renderer);
 	SDL_Quit();
 	return 0;

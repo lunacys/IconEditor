@@ -4,36 +4,46 @@
 #include <vector>
 #include "SDL2/SDL.h"
 
-struct Rgb
+struct BGRA
 {
 	unsigned char b;
 	unsigned char g;
 	unsigned char r;
-	unsigned char s;
+	unsigned char a;
 };
 
 class IcoProcessor
 {
 public:
-	IcoProcessor(SDL_Window* window, SDL_Renderer* renderer, int width, int height);
-	IcoProcessor(SDL_Window* window, SDL_Renderer* renderer, const std::string& filename);
+	IcoProcessor(SDL_Window* window, SDL_Renderer* renderer, int width, int height, int x, int y);
+	IcoProcessor(SDL_Window* window, SDL_Renderer* renderer, const std::string& filename, int x, int y);
 	virtual ~IcoProcessor();
 
 	void load_from_file(std::string filename);
 	void save_to_file(std::string filename);
-	int get_image_width() const;
-	int get_image_height() const;
-	Rgb* get_pixel_at(int x, int y);
-	void set_pixel_at(int x, int y, Rgb* quad);
-	SDL_Texture* to_texture() const;
+
+	int get_width() const;
+	int get_height() const;
+
+	BGRA* get_pixel_at(int x, int y);
+	void set_pixel_at(int x, int y, const BGRA& quad);
+
+	SDL_Texture* get_texture() const;
+
 	void update();
+	void update_point(const SDL_Point& point);
+	void render() const;
+
 	void flip_horizontally();
 
-private:
-	typedef int LONG;
-	typedef unsigned short WORD;
-	typedef unsigned int DWORD;
+	SDL_Point get_position() const;
+	void set_position(int x, int y);
+	void set_position(SDL_Point point);
 
+	void set_scale(int val);
+	int get_scale() const;
+
+private:
 	typedef struct
 	{
 		unsigned char        bWidth;          // Width, in pixels, of the image
@@ -51,26 +61,23 @@ private:
 		unsigned short           idReserved;   // Reserved (must be 0)
 		unsigned short           idType;       // Resource Type (1 for icons)
 		unsigned short           idCount;      // How many images?
-		//ICONDIRENTRY   idEntries[1]; // An entry for each image (idCount of 'em)
 	} ICONDIR, *LPICONDIR;
 
 	typedef struct tagBITMAPINFOHEADER {
-		DWORD biSize;
-		LONG  biWidth;
-		LONG  biHeight;
-		WORD  biPlanes;
-		WORD  biBitCount;
-		DWORD biCompression;
-		DWORD biSizeImage;
-		LONG  biXPelsPerMeter;
-		LONG  biYPelsPerMeter;
-		DWORD biClrUsed;
-		DWORD biClrImportant;
+		unsigned int biSize;
+		int  biWidth;
+		int  biHeight;
+		unsigned short  biPlanes;
+		unsigned short  biBitCount;
+		unsigned int biCompression;
+		unsigned int biSizeImage;
+		int  biXPelsPerMeter;
+		int  biYPelsPerMeter;
+		unsigned int biClrUsed;
+		unsigned int biClrImportant;
 	} BITMAPINFOHEADER, *PBITMAPINFOHEADER;
 
-	//std::vector<char> buffer_;
-
-	std::vector<Rgb*> pixel_data_;
+	std::vector<BGRA*> pixel_data_;
 
 	SDL_Renderer* renderer_;
 	SDL_Window* window_;
@@ -79,7 +86,8 @@ private:
 	int width_;
 	int height_;
 
-	
+	int x_, y_;
+	int scale_ = 1;
 };
 
 #endif // ICO_PROCESSOR_H
