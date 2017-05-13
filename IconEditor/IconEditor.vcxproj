@@ -137,8 +137,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="ico_processor.cpp" />
-    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="editor_sheet.cpp" />
+    <ClCompile Include="icon_editor.cpp" />
+    <ClCompile Include="icon_texture.cpp" />
+    <ClCompile Include="ico_reader.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SDL2.dll">
@@ -151,7 +154,10 @@
     <Library Include="lib\SDL2test.lib" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ico_processor.h" />
+    <ClInclude Include="editor_sheet.h" />
+    <ClInclude Include="icon_editor.h" />
+    <ClInclude Include="icon_texture.h" />
+    <ClInclude Include="ico_reader.h" />
     <ClInclude Include="include\SDL2\begin_code.h" />
     <ClInclude Include="include\SDL2\close_code.h" />
     <ClInclude Include="include\SDL2\SDL.h" />
