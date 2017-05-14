@@ -28,8 +28,8 @@ public:
 	void set_position(int x, int y);
 	void set_position(SDL_Point point);
 
-	void set_scale(float val);
-	float get_scale() const;
+	void set_scale(int val);
+	int get_scale() const;
 
 	const std::vector<Color*>& get_image_data() const;
 
@@ -44,5 +44,5 @@ private:
 	int height_;
 
 	int x_, y_;
-	float scale_ = 1.0f;
+	int scale_ = 1;
 };

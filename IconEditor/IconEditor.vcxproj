@@ -142,6 +142,9 @@
     <ClCompile Include="icon_texture.cpp" />
     <ClCompile Include="ico_reader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="tool_color_picker.cpp" />
+    <ClCompile Include="tool_eraser.cpp" />
+    <ClCompile Include="tool_pen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="SDL2.dll">
@@ -231,6 +234,10 @@
     <ClInclude Include="include\SDL2\SDL_types.h" />
     <ClInclude Include="include\SDL2\SDL_version.h" />
     <ClInclude Include="include\SDL2\SDL_video.h" />
+    <ClInclude Include="paint_tool.h" />
+    <ClInclude Include="tool_color_picker.h" />
+    <ClInclude Include="tool_eraser.h" />
+    <ClInclude Include="tool_pen.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md" />

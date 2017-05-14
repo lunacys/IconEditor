@@ -3,18 +3,20 @@
 IconTexture::IconTexture(SDL_Window* window, SDL_Renderer* renderer, int width, int x, int y)
 	: width_(width), height_(width), x_(x), y_(y)
 {
-	if (width != 16 || width != 32 || width != 48 || width != 64) throw std::runtime_error("Invalid size");
+	//if (width != 16 || width != 32 || width != 48 || width != 64) throw std::runtime_error("Invalid size");
 
 	window_ = window;
 	renderer_ = renderer;
-	texture_ = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, width);
-	
+
 	for (int i = 0; i < width * width; i++)
 	{
 		Color* white = new Color;
 		white->r = white->g = white->b = white->a = 255;
 		image_data_.push_back(white);
 	}
+
+	texture_ = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, width, width);
+	update();
 }
 
 IconTexture::IconTexture(SDL_Window* window, SDL_Renderer* renderer, const std::string& filename, int x, int y)
@@ -124,12 +126,14 @@ void IconTexture::set_position(SDL_Point point)
 	set_position(point.x, point.y);
 }
 
-void IconTexture::set_scale(float val)
+void IconTexture::set_scale(int val)
 {
 	scale_ = val;
+	if (scale_ < 1) scale_ = 1;
+	if (scale_ > 16) scale_ = 16;
 }
 
-float IconTexture::get_scale() const
+int IconTexture::get_scale() const
 {
 	return scale_;
 }
